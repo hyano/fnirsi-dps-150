@@ -8,10 +8,9 @@ const HEADER_INPUT  = 0xf0; // 240
 const HEADER_OUTPUT = 0xf1; // 241
 
 const CMD_GET     = 0xa1; // 161
-const CMD_XXX_176 = 0xb0; // 176
+const CMD_BAUD    = 0xb0; // 176
 const CMD_SET     = 0xb1; // 177
-const CMD_XXX_192 = 0xc0; // 192
-const CMD_XXX_193 = 0xc1; // 193
+const CMD_SESSION = 0xc1; // 193
 
 // float
 export const VOLTAGE_SET = 193;
@@ -82,7 +81,7 @@ export class DPS150 {
 
 	async stop() {
 		console.log('stop');
-		await this.sendCommand(HEADER_OUTPUT, CMD_XXX_193, 0, 0);
+		await this.sendCommand(HEADER_OUTPUT, CMD_SESSION, 0, 0);
 		await this.reader.cancel();
 		await this.port.close();
 	
@@ -143,9 +142,9 @@ export class DPS150 {
 	}
 
 	async initCommand() {
-		await this.sendCommand(HEADER_OUTPUT, CMD_XXX_193, 0, 1); // CMD_1
+		await this.sendCommand(HEADER_OUTPUT, CMD_SESSION, 0, 1); // CMD_1
 		// new int[5] { 9600, 19200, 38400, 57600, 115200 };
-		await this.sendCommand(HEADER_OUTPUT, CMD_XXX_176, 0, [9600, 19200, 38400, 57600, 115200].indexOf(115200) + 1); // CMD_13
+		await this.sendCommand(HEADER_OUTPUT, CMD_BAUD, 0, [9600, 19200, 38400, 57600, 115200].indexOf(115200) + 1); // CMD_13
 
 		await this.sendCommand(HEADER_OUTPUT, CMD_GET, MODEL_NAME, 0); // get model name
 		await this.sendCommand(HEADER_OUTPUT, CMD_GET, HARDWARE_VERSION, 0); // get hardware version
